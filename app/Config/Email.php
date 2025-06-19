@@ -28,17 +28,17 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'smtp.livemail.co.uk';
+    public string $SMTPHost = '**********';
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'william_pritchard@lekka-media.co.uk';
+    public string $SMTPUser = '********#***';
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'VwtR9AHLTwg4@r4';
+    public string $SMTPPass = '*******';
 
     /**
      * SMTP Port
