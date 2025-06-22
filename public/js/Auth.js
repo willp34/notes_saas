@@ -25,7 +25,7 @@ const token = jQuery.cookie('CI4J~WT'); // get token from storagefunction getCoo
 					}
 					jsonObject[key].push(value); // Add to array
 				  } else {
-					jsonObject[key] = value;
+					jsonObject[key] =[value];
 				  }
 				});
 	   const options ={

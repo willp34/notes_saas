@@ -9,6 +9,8 @@ use App\Models\TeamModel;
 use App\Models\TeamUserModel;
 use App\Models\UserModel; 
 
+use App\Models\TeamInvitesModel    ;
+
 class Team extends ResourceController
 {
 	protected $user ;
@@ -27,13 +29,7 @@ class Team extends ResourceController
 	
 	public function index()
     {
-		
-		
-		
 		$this->user = $this->request->user;
-		
-		
-		 
 		
 		 return $this->respond([
             'message' => 'Dashboard data loaded.',
@@ -74,14 +70,25 @@ class Team extends ResourceController
 		if( !$this->userModel->isTeamAdmin($this->user["id"], $teamID) ){
 			return $this->failForbidden('Only admins can invite');
 		}
+		
+		
+		
 		$inviteUserInfo = $this->request->getJSON(true);
 		
 		foreach($inviteUserInfo["users[]"] as $invitee){
 			
-			echo "Invite $invitee   ";
+			//echo "Invite $invitee   ";
+			
+			$inviteModel = new TeamInvitesModel();
+			
 			$invitee = (new UserModel())->where("id",$invitee)->first();
 			
 			if(!$invitee) return $this->failNotFound('User not found');
+			
+			
+			$token = $inviteModel->creatInvite($teamID,$invitee['email'])   ;
+			$lik = site_url("teams/acceptInvite/$token");
+			
 			/*$this->teamuserModel->insert([
 					"team_id" => $teamID,
 					"user_id" => $invitee["id"], 
@@ -95,6 +102,31 @@ class Team extends ResourceController
 		
 		$data["message"]= "User invited";
 		return $this->respond($data);
+	}
+	
+	
+	public function acceptInvite($token)
+	{
+		$authUser =  $this->request->user;
+
+		$inviteModel = new TeamInviteModel();
+		$invite = $inviteModel->getValidInvite($token);
+		if (!$invite) {
+			return $this->failNotFound('Invalid or expired invite.');
+		}
+
+		// Add to team
+		$teamUserModel = new TeamUserModel();
+		$teamUserModel->insert([
+			'team_id' => $invite['team_id'],
+			'user_id' => $authUser['id'],
+			'role' => 'member'
+		]);
+
+		// Mark invite used
+		$inviteModel->update($invite['id'], ['status' => 'accepted']);
+
+		return $this->respond(['message' => 'You have joined the team.']);
 	}
 	
 	public function getUsersforTeam($teamId){
