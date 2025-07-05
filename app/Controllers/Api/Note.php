@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 
 use CodeIgniter\RESTful\ResourceController;
@@ -15,7 +15,7 @@ class Note extends ResourceController
 	protected $versionModel;
 	protected $user;
 
-	public __construct()
+	public function  __construct()
 	{
 		$this->user = new UserModel();
 		$this->noteModel =new NoteModel();
@@ -34,16 +34,22 @@ class Note extends ResourceController
     {
         //
 			$data = $this->request->getJSON(true);
+			
+			if(empty($data['teamid'])){
+				return $this->failForbidden('Access denied Team Id not selected.');
+			}
 			$teamID = $data['teamid'];
 			$this->user = $this->request->user;
+			
+			
 			if($teamID){
 				 if (!$this->user->belongsToTeam($teamId)) {
                 return $this->failForbidden('Access denied.');
 				}
 			     $notes = $this->noteModel->where('team_id', $teamId)->findAll();
-        } else {
-            $notes = $this->noteModel->where('user_id', $this->user->id)->where('team_id', null)->findAll();
-        }
+			} else {
+				$notes = $this->noteModel->where('user_id', $this->user['id'])->where('team_id', null)->findAll();
+			}
 		
 		return $this->respond($note);
 		
@@ -70,7 +76,7 @@ class Note extends ResourceController
     public function create()
     {
         //
-		     $data = $this->request->getJSON(true);
+		$data = $this->request->getJSON(true);
         $teamId = $data['team_id'] ?? null;
 
         if ($teamId && !$this->user->belongsToTeam($teamId)) {

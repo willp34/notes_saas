@@ -37,10 +37,12 @@ class Teams extends BaseController
 		$memberTeams = $this->teamuserModel->getTeamsByUser($this->user['id'], 'member');
 		
 		$data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js", "src/Process_request.js","Auth.js");
+		$data["css"] = array("Notepad.css");
         $data['modal_Header'] = "Invite to Team";
 		$data['modal_Form'] = view('forms/team_invite',array());
 		$data['memberTeams'] = $memberTeams;
 		$data["teamsBelongTo"] = $createdTeams;
+
 		$this->template('teams',$data);
     }
 	

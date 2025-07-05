@@ -1,8 +1,8 @@
 <?php 
 
-namespace App/Models;
+namespace App\Models;
 
-use Codigniter/Model;
+use CodeIgniter\Model;
 
 class NoteModel extends Model
 {

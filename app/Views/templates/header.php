@@ -16,8 +16,19 @@
   .select2-container {
   z-index: 9999 !important;
 }
-  
+ 
   </style>
+  <?php
+  if(isset($css)){
+	 
+		foreach($css as $css_style){
+			
+			?>
+			 <link href="<?php echo base_url();?>css/<?php echo $css_style ; ?>" rel="stylesheet" >
+		
+			<?php
+		}
+  }		?>
 </head>
 <body>
 

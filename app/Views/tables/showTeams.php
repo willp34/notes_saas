@@ -36,7 +36,7 @@
 			  ?>
 				<td><?php echo $team['role'] ;   ?></td>
 				<td><?php //echo $team['user_email'] ;   ?></td>
-				<td></td>
+				<td><button type="button" class="btn btn-link"    ><a href="" data-id="<?php echo $team["id"]; ?>"   class="Add Note" >Add Note</a></button></td>
 				<td></td>
 			  <?php }
 			  ?>
@@ -49,3 +49,6 @@
    
   </tbody>
 </table>
+<div id="notes">
+  <p>NOTES</p>
+</div>

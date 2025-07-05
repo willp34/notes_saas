@@ -18,6 +18,12 @@ $routes->group('api', function($routes){
 	// creat team and add to database 
 	$routes->post('teams', 'Api\Team::create');
 	
+	// Notes
+	$routes->get('notes', 'Api\Note::index');
+	
+	
+	
+	
 	
 	//invite team member 
 	$routes->get('invite/(:num)', 'Api\Team::invite/$1');
