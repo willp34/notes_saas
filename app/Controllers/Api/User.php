@@ -20,11 +20,12 @@ class User extends ResourceController
 		
 		$data = $this->request->getJSON(true);
 		$password = password_hash($data['pswd'], PASSWORD_DEFAULT);
+		
 		try{
 			$userId = $this->newUser->insert([
 			'email' => $data['email'],
-			'password' => $password 
-		]); 
+			'password' => $password
+		] ); 
 		//$data = json_decode(file_get_contents('php://input'), true);
 		
 			return $this->respondCreated(['user_id' => $userId]);

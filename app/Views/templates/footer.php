@@ -55,4 +55,38 @@
   }		?>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="<?php echo base_url();?>js/userSelect2.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.js"></script>
+<script>
+
+
+  jQuery(function () {
+    
+	jQuery('#star-rating').raty({
+      path: 'https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/images',
+      scoreName: 'rating',
+      click: function (score, evt) {
+        console.log('Selected score: ' + score);
+		  jQuery('#rating-input').val(score); // Sync hidden input
+		  
+        // Send via AJAX
+        /*jQuery.ajax({
+          url: '<?= site_url('rating/submit') ?>',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            rating: score,
+            <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+          },
+          success: function (res) {
+            alert(res.message || 'Rating submitted!');
+          },
+          error: function (xhr) {
+            alert('Something went wrong.');
+          }
+        });*/
+      }
+    });
+  });
+</script>
 </html>

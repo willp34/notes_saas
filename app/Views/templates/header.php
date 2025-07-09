@@ -29,6 +29,10 @@
 			<?php
 		}
   }		?>
+  <link href="<?php echo base_url();?>js/jquery_raty/raty.css" rel="stylesheet" >
+  
+  
+  
 </head>
 <body>
 

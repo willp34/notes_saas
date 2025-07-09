@@ -11,7 +11,7 @@
 							<form action="<?php echo base_url()?>index.php/api/addUser" method="post"    class="needs-validation"  id="registerForm" novalidate > 
 										<div class="mb-3 mt-3">
 							 
-							 
+									<?= csrf_field() ?>
 									 <label for="validationCustomUsername" class="form-label">Username</label>
 										<div class="input-group has-validation">
 										  <span class="input-group-text" id="inputGroupPrepend">@</span>
@@ -55,6 +55,13 @@
 									  Passwords do not match.
 									</div>
 							</div>
+							
+							
+							
+							
+							  <label for="rating">Your rating:</label>
+							  <div id="star-rating"></div>
+							
 							  <button type="submit" class="btn btn-primary">Submit</button>
 						</form>
 						

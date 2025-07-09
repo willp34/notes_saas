@@ -6,9 +6,8 @@ class Home extends BaseController
 {
     public function index()
     {
-		echo ENVIRONMENT;
-				
-		$data['js']= array("jquery/jquery.min.js","src/Process_request.js","Validate_registrationform.js") ; 
+		echo ENVIRONMENT;	
+		$data['js']= array("jquery/jquery.min.js","src/Process_request.js","Validate_registrationform.js"  ) ; 
         $this->template('home',$data);
     }
 	

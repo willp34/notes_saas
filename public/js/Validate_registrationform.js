@@ -71,7 +71,23 @@ form.addEventListener('submit', function (event) {
 		
 		// add ajax here
 		var action = event.target.action;
-		ax = new ajax_request(event);
+		
+		  const formData = new FormData(event.target);
+		const jsonObject = {};
+		formData.forEach((value, key) => {
+				  // Check if key already exists
+				
+					jsonObject[key] = value;
+				  
+				});
+	   const options ={
+			method : "POST",
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body: JSON.stringify(jsonObject)
+		};
+		ax = new ajax_request(event,options);
 		ax.loadData();
 		//LogInGetJWT_Token(event);
 		
@@ -156,7 +172,8 @@ function LogInGetJWT_Token(e) {
   const jsonObject = {};
    
   formData.forEach((value, key) => {
-    jsonObject[key] = value;
+   // alert("Value = "+value);
+	jsonObject[key] = value;
 	
   });
 
