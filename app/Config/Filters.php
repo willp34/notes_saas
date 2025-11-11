@@ -106,7 +106,7 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-		'jwt' => ['before' => ['dashboard', 'dashboard/*' , 'api/teams/', 'api/teams/*' , 'api/invite/*']], // Any route you want to protect
+		'jwt' => ['before' => ['dashboard', 'dashboard/*' , 'api/teams/', 'api/teams/*' , 'api/invite/*', 'api/notes/', 'api/notes/*']], // Any route you want to protect
 		'noajax_jwt' => ['before'  =>['teams', 'teams/*' ] ]
 	];
 }

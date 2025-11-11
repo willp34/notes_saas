@@ -3,9 +3,13 @@
 namespace App\Controllers\Api;
 
 
+
 use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\Shield\Authentication\Authentication;
+
 use App\Models\NoteModel;
 use App\Models\NoteVersionModel;
+
 use App\Models\UserModel; 
 
 class Note extends ResourceController
@@ -33,6 +37,7 @@ class Note extends ResourceController
     public function index()
     {
         //
+		
 			$data = $this->request->getJSON(true);
 			
 			if(empty($data['teamid'])){
@@ -76,25 +81,30 @@ class Note extends ResourceController
     public function create()
     {
         //
+		
 		$data = $this->request->getJSON(true);
-        $teamId = $data['team_id'] ?? null;
-
-        if ($teamId && !$this->user->belongsToTeam($teamId)) {
+		$teamId =  $data['teamId'] ?? null;
+	
+		$user = $this->request->user;
+		$data["user"]  = $user;
+		$userID  =  $user["id"];
+	
+   /* if ($teamId && !$this->user->belongsToTeam( $userID ,$teamId)) {
             return $this->failForbidden('Access denied.');
         }
-
+     */ 
         $noteData = [
-            'content' => $data['content'],
+            'content' => $data['note_content'],
             'team_id' => $teamId,
-            'user_id' => $this->user->id
+            'user_id' =>  $user["id"]
         ];
 
         $noteId = $this->noteModel->insert($noteData);
 
         $this->versionModel->insert([
             'note_id' => $noteId,
-            'content' => $data['content'],
-            'edited_by' => $this->user->id,
+            'content' => $noteData['content'],
+            'edited_by' => $user["id"],
             'edited_at' => date('Y-m-d H:i:s')
         ]);
 

@@ -7,7 +7,7 @@
                           </h2>
 						  
 						  
-							<form action="<?php echo base_url()?>index.php/api/teams" method="post"    class=""  id="teamForm" > 
+							<form action="<?php echo base_url()?>index.php/api/teams" method="post"     id="teamForm" > 
 										
 								<div class="mb-3 mt-3">
 							 

@@ -35,6 +35,13 @@ $routes->group('api', function($routes){
 	$routes->get('getUsersforTeam/(:num)', 'Api\Team::getUsersforTeam/$1');
 	$routes->post('getUsersforTeam/(:num)', 'Api\Team::getUsersforTeam/$1');
 	
+	
+	
+	
+	// notes  
+	$routes->post( 'notes' ,'Api\Note::create'   )  ;
+	
+	
 });
 
 

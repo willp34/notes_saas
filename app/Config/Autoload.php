@@ -40,6 +40,10 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
     ];
+	
+	
+	
+	
 
     /**
      * -------------------------------------------------------------------
@@ -89,4 +93,17 @@ class Autoload extends AutoloadConfig
      * @var list<string>
      */
     public $helpers = [];
+	
+	
+	
+	  public function __construct()
+    {
+        parent::__construct();
+
+	
+        // Only add this namespace if SUPPORTPATH is defined (e.g., during testing)
+        if (defined('SUPPORTPATH')) {
+            $this->psr4['Tests\Support'] = SUPPORTPATH;
+        }
+    }
 }

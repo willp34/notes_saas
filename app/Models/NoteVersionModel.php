@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class NoteVersionmodel extends Model
+class NoteVersionModel extends Model
 {
 	protected $table = "note_versions";
 	protected $primaryKey= 'id';
