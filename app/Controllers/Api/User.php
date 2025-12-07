@@ -28,7 +28,7 @@ class User extends ResourceController
 		] ); 
 		//$data = json_decode(file_get_contents('php://input'), true);
 		
-			return $this->respondCreated(['user_id' => $userId]);
+			return $this->respondCreated(['user_id' => $userId, 'message'=>'User created']);
 		}
 		catch (\Exception $e)
 		{

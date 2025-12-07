@@ -43,23 +43,38 @@ class Team extends ResourceController
 	
 	public function create(){
 		
-		$formData =$this->request->getJSON(true);
-		$this->user = $this->request->user;
-		$data["user"]  = $this->user;
-		$data["input"] = $formData;
+		$data = $this->request->getJSON(true);
+
+		if (!$data || !isset($data['team_name'])) {
+			return $this->failValidationError('team_name is required.');
+		}
+
+		$team_name = trim($data['team_name']);
+
+		// Extra safety: reject empty string after trimming
+		if ($team_name === '') {
+			return $this->response->setJSON([
+				'error' => 'Please enter a team name.'
+			]);
+			// return $this->failValidationError('Team name cannot be empty.');
+		}
+		
+		$user = $this->request->user;
 
 		$teamID = $this->teamModel->insert([
-				"name" => $formData["team_name"],
-				"created_by" => $this->user["id"]
+				"name" => $team_name,
+				"created_by" => $user["id"]
 		]);
 		
 		$this->teamuserModel->insert([
 				"team_id" => $teamID,
-				"user_id" => $this->user["id"], 
+				"user_id" => $user["id"], 
 				"role" => "admin"
 		]);
+		
 		$data["team_id"]= $teamID;
-		return $this->respond($data);
+		$data["message"] = "team created successfully" ;
+		return $this->respondCreatd($data);
 		
 	}
 	

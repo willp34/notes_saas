@@ -1,7 +1,8 @@
 
 	</div>
 </div>
-
+<div id="toastArea" class="toast-container position-fixed top-0 end-0 p-3 "
+	style="z-index: 99999"></div>
 <div class="mt-5 p-4 bg-dark text-white text-center">
   <p>Footer</p>
 </div>
@@ -42,17 +43,41 @@
 </body>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+ <?php
+	
+	//modules
+	  if(isset($modules)){
+			foreach($modules as $modules_script){
+				
+				?>
+				 <script type="module" src="<?php echo base_url();?>js/<?php echo $modules_script ; ?>"></script>
+			
+				<?php
+			}
+	  }		?>
+	  
+	  
+	  
   <?php
   if(isset($js)){
 		foreach($js as $js_script){
 			
 			?>
-			 <script src="<?php echo base_url();?>js/<?php echo $js_script ; ?>"></script>
+			 <script  src="<?php echo base_url();?>js/<?php echo $js_script ; ?>"></script>
 		
 			<?php
 		}
   }		?>
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="<?php echo base_url();?>js/userSelect2.js"></script>
   

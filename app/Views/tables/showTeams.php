@@ -49,25 +49,3 @@
    
   </tbody>
 </table>
-<div id="notes">
-  <p>NOTES</p>
-  
-  <form action="<?php echo base_url()?>index.php/api/notes" method="post"      id="noteForm" > 
-										
-								<div class="mb-3 mt-3">
-							 
-							 
-									 <label for="" class="form-label">Note</label>
-										<div class="input-group ">
-										
-										  <textarea type="text" class="form-control" placeHolder="Note jotter" name="note_content" id="note-content" aria-describedby="inputGroupPrepend" rows="4"></textarea>
-																			  
-										</div>
-								</div>
-							  
-								<input type="hidden"  name="teamId" value="" id="teamField" />
-							  <button type="submit" class="btn btn-primary">Add Note</button>
-						</form>
-  
-  
-</div>

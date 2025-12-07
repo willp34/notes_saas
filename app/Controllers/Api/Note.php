@@ -107,8 +107,11 @@ class Note extends ResourceController
             'edited_by' => $user["id"],
             'edited_at' => date('Y-m-d H:i:s')
         ]);
+		
+		$note_response["id"] = $noteId;
+		$note_response["message"] = "Note Created";
 
-        return $this->respondCreated(['id' => $noteId]);
+        return $this->respondCreated($note_response);
 		
     }
 

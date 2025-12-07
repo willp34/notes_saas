@@ -12,6 +12,18 @@ $routes->get('/teams', 'Teams::index');
 * team pages
 */
 
+// Huffman encoding
+$routes->group('encoding', function($routes){
+	
+	// Huffman encoding result 
+	
+	$routes->post('huffman', 'Encoding_methods\Huffman_encoding::index');
+	//$routes->get('huffman', 'Encoding_methods\Huffman_encoding::index');
+	
+	
+	
+});
+// Api Controllers
 $routes->group('api', function($routes){
 	
 	$routes->get('teams', 'Api\Team::index');
@@ -59,13 +71,20 @@ $routes->group('home', function($routes){
 #Auththentication
 $routes->group('auth', function($routes){
 	
-	$routes->post('loggedin', 'Auth::login');
-	$routes->get('loggedin', 'Auth::login');
-	$routes->get('logout', 'Auth::logOut');
-	$routes->post('sendResetLink', 'Auth::sendResetLink');
+	$routes->post('loggedin', 'Api\Auth::login');
+	$routes->get('loggedin', 'Api\Auth::login');
+	$routes->get('logout', 'Api\Auth::logOut');
+	$routes->post('sendResetLink', 'Api\Auth::sendResetLink');
 	//$routes->get('sendResetLink', 'Auth::sendResetLink');
 });
 
+#Dashboard
+$routes->group('dashboard', function($routes){
+	
+	$routes->get('/', 'Dashboard::index');
+	$routes->get('images', 'Dashboard::image_thresholding');
+	
+});
 
 ## User pages
 

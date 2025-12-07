@@ -20,4 +20,25 @@ class TeamModel extends Model
 		return array_column($records,'id');	
 		
 	}
+	/**
+     * Delete all teams with empty, null, or whitespace-only names.
+     *
+     * @return int Number of deleted rows
+     */
+    public function deleteEmptyNames()
+    {
+		// first find ID columns  
+		
+		$ids = $this->select('id')
+				->where('name','')
+				->orWhere('name',null)
+				->orWhere('TRIM(name) = \'\'', null, false)
+				->findColumn('id');
+				
+		if(empty($this)){
+			return 0;
+		}
+		
+		return $this->delete($ids);
+	}
 }

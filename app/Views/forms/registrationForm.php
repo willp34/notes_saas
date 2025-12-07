@@ -8,7 +8,7 @@
                           </h2>
 						  
 						  
-							<form action="<?php echo base_url()?>index.php/api/addUser" method="post"    class="needs-validation"  id="registerForm" novalidate > 
+							<form action="<?php echo base_url()?>index.php/api/addUser" method="post" data-ajax   class="needs-validation"  id="registerForm" novalidate > 
 										<div class="mb-3 mt-3">
 							 
 									<?= csrf_field() ?>
@@ -35,9 +35,9 @@
 							  <label for="pwd" class="form-label">Password:</label>
 							  
 							  <div class="input-group   has-validation">
-								<input type="password" class="form-control  isvalid" id="pswd" 
+								<input type="password" class="form-control  isvalid password" id="pswd" 
 									   placeholder="Enter password" name="pswd" 
-									   oninput="validatePassword(this.value)" required>
+									    required>
 								<button class="btn btn-outline-secondary" type="button" id="togglePassword">
 								  <i class="bi bi-eye"></i>
 								</button>

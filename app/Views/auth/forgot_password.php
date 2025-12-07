@@ -4,7 +4,7 @@
                     <div class="card-body">
                         <h2 class="mb-4">  Reset your pssword </h2>
 						  
-							<form action="<?php echo base_url()?>index.php/auth/sendResetLink" method="post"    class="needs-validation"  id="resetForm" > 
+							<form action="<?php echo base_url()?>index.php/auth/sendResetLink" method="post"    class="needs-validation ajax_requet"  id="resetForm" > 
 										<div class="mb-3 mt-3">
 							 
 							 

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\Shield\Authentication\Authentication;
+
 use App\Models\UserModel;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -12,7 +14,7 @@ use  App\Services\EmailService;
 class Auth extends ResourceController
 {
 	protected $userModel;
-
+	
 	public function __construct(){
 		$this->userModel = new UserModel();
 	}
@@ -25,13 +27,15 @@ class Auth extends ResourceController
         $password = $data['pswd'] ?? null;
 
         if (!$email || !$password) {
-            return $this->fail('Email and password are required.',422);
+            return $this->failValidationErrors('Email and password are required.');
         }
 
         $user = $this->userModel->where('email', $email)->first();
 
         if (!$user || !password_verify($password, $user['password'])) {
-            return $this->fail('Invalid credentials.',401);
+            return $this->respond([
+				'error' => 'Invalid credentials.'
+			]);
         }
 		
 		// JWT payload
@@ -88,8 +92,17 @@ class Auth extends ResourceController
 			$data = $this->request->getJSON(true);
 			//$data = $this->request->getPost();
 			
-			$emailAddress = $data['email'] ?? null;
+			$emailAddress = trim($data['email'] );
 			
+			
+
+			if (!$emailAddress) {
+	
+				return $this->respond([
+					'error' => 'Email is required.'
+				]);
+				return $this->failValidationErrors('Email is required.');
+			}
 			$user =  $this->userModel->where('email', $emailAddress)->first();
 			if (!$user) {
 					return redirect()->back()->with('error', 'Email not found.');

@@ -4,16 +4,22 @@ namespace App\Controllers;
 use App\Models\UserModel;
 class Home extends BaseController
 {
+	private $data = null;
+	public function  __construct()
+	{
+		$this->data['modules']= array( "src/FormValidator.js " ,"src/registerForm.js" ,"src/Ajax_service.js","src/Ajax_form.js" ) ; 
+        $this->data['js'] = array("jquery/jquery.min.js" ,"jquery/jquery.cookie.js");
+	}
     public function index()
     {
 		echo ENVIRONMENT;	
-		$data['js']= array("jquery/jquery.min.js","src/Process_request.js","Validate_registrationform.js"  ) ; 
-        $this->template('home',$data);
+		$this->data['js']= array("jquery/jquery.min.js", "jquery/jquery.cookie.js" ) ; 
+        $this->template('home',$this->data);
     }
 	
 	public function logon(){
-		$data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js","logonForm.js");
-		$this->template('login',$data);
+		//$this->data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js");
+		$this->template('login',$this->data);
 	}
 	public function test(){
 		
@@ -21,9 +27,9 @@ class Home extends BaseController
 	}
 	
 	public function forgotPassword(){
-			$data["content"] = "hi";
-			$data['js'] = array("jquery/jquery.min.js","src/Process_request.js","ResetLink.js");
-			return $this->template('auth/forgot_password',$data);
+			$this->data["content"] = "hi";
+			
+			return $this->template('auth/forgot_password',$this->data);
 			
 		}
 		
@@ -31,21 +37,17 @@ class Home extends BaseController
 	{
 		
 		 $userModel = new UserModel();
-		$user = $userModel->where('reset_token', $token)
+		 $user = $userModel->where('reset_token', $token)
 						  ->where('reset_expires_at >=', date('Y-m-d H:i:s'))
 						  ->first();
 
-    if (!$user) {
-        return redirect()->to('/home/login')->with('error', 'Invalid or expired token.');
-    }
-	
-	$data["token"] = $token ;
-	
-	
-	
-	
-	
-		return $this->template('auth/reset_password',$data);
+		if (!$user) {
+			return redirect()->to('/home/login')->with('error', 'Invalid or expired token.');
+		}
+		
+		$this->data["token"] = $token ;
+		
+		return $this->template('auth/reset_password',$this->data);
 	}
 	
 }

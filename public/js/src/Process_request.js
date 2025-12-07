@@ -1,4 +1,5 @@
 
+
 class ajax_request {
 	
 	constructor(e , options){
@@ -58,6 +59,14 @@ class ajax_request {
       .then(data => {
         console.log(data);
         jQuery('#authorised').html(data.html);
+		
+		// Check key "html"
+        if ("error" in data) {
+            const myEl = document.createElement("div");
+			myEl.className = "alert alert-danger alert-dismissible fade show";
+			myEl.textContent = data.error ;
+			document.querySelector("#Show-Messages").appendChild(myEl);
+        }
       })
       .catch(err => {
         console.error(err);

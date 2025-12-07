@@ -1,4 +1,5 @@
-document.getElementById('resetForm').addEventListener('submit',resetLink );
+/*
+document.getElementById('resetForm').addEventListener('submit',resetLink_ );
    
    
      function resetLink(e){

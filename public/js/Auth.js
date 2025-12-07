@@ -9,15 +9,15 @@ const token = jQuery.cookie('CI4J~WT'); // get token from storagefunction getCoo
    
    //  document.getElementById('noteForm').addEventListener('submit',ajaxHasndler );
    
-   document.addEventListener("submit", team_and_notes );
+   //document.addEventListener("submit", team_and_notes );
    
-   
+   /*@
    function team_and_notes(e){
     if (e.target && (e.target.id === "teamForm" || e.target.id === "noteForm")) {
         //e.preventDefault();
         ajaxHandler(e);
     }
-}
+} */
    
    function   ajaxHandler(e){
 	   e.preventDefault();
@@ -55,40 +55,7 @@ const token = jQuery.cookie('CI4J~WT'); // get token from storagefunction getCoo
    }
    
    
-   //Modals  
-   
-   jQuery(".inviteForm").click(inviteModalPopup );
-   
-   function inviteModalPopup(){
-	  var invite_link = jQuery(this).attr('href')
-	  var teamID = jQuery(this).data("id");
-	  var url = "http://localhost/notes-saas/public/index.php/api/getUsersforTeam/"+teamID;
-	jQuery('#team_id').val(teamID) ;
-	  jQuery('#teamInviteForm').attr('action', invite_link);
-	  jQuery("#userTable tbody").empty();
-	  jQuery.ajax({
-            type: "get",
-            url: url,
-			headers : {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + token
-					},
-            data: null,
-            processData: true,
-            contentType: "application/json",
-            dataType: "json",
-            success: function(response){
-				  jQuery.each(response.users_in_Team, function (index, item) {
-					  var row = jQuery("<tr>");
-					  row.append(jQuery("<td>").text(item.user_email));
-					  jQuery("#userTable tbody").append(row);
-					});
-			},
-            error: function (xhr, status, error) {
-                console.error('Error ',xhr.status ,' : ',status,' ' , xhr.responseText);
-            }
-        });
-   }
+  
    
   jQuery(".ajax_requet").submit(ajaxHandler); 
    

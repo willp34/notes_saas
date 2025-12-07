@@ -13,14 +13,17 @@ use App\Models\UserModel;
 class Teams extends BaseController
 {
 	
+	private $data = null;
 	protected $user ;
 	protected $teamModel ;
 	protected $teamuserModel;
 	
 	protected $userModel;
 	
+	
 	public function __construct(){
-		
+		$this->data['modules']= array(  "src/Ajax_form.js"  ) ; 
+		$this->data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js");
 		$this->teamModel = new TeamModel();
 		$this->teamuserModel = new TeamUserModel();
 		$this->userModel = new UserModel();
@@ -36,19 +39,19 @@ class Teams extends BaseController
 		$createdTeams = $this->teamuserModel->getTeamsByUser($this->user['id'], 'created');
 		$memberTeams = $this->teamuserModel->getTeamsByUser($this->user['id'], 'member');
 		
-		$data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js", "src/Process_request.js","Auth.js");
-		$data["css"] = array("Notepad.css");
-        $data['modal_Header'] = "Invite to Team";
-		$data['modal_Form'] = view('forms/team_invite',array());
-		$data['memberTeams'] = $memberTeams;
-		$data["teamsBelongTo"] = $createdTeams;
+		$this->data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js","text_stats.js");
+		$this->data["css"] = array("Notepad.css");
+        $this->data['modal_Header'] = "Invite to Team";
+		$this->data['modal_Form'] = view('forms/team_invite',array());
+		$this->data['memberTeams'] = $memberTeams;
+		$this->data["teamsBelongTo"] = $createdTeams;
 
-		$this->template('teams',$data);
+		$this->template('teams',$this->data);
     }
 	
 	public function logon(){
-		$data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js","logonForm.js");
-		$this->template('login',$data);
+//		$this->data['js'] = array("jquery/jquery.min.js","jquery/jquery.cookie.js");
+		$this->this->template('login',$data);
 	}
 	public function test(){
 		
