@@ -49,4 +49,6 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 </form>
+
+<canvas id="fractal" width="600" height="520"></canvas>
 </div>

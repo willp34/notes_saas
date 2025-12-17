@@ -93,7 +93,47 @@ jQuery(function ($) {
 
     });
 
+// fractal
 
+	const fractal_canvas = document.getElementById("fractal");
+	const fractal_ctx = fractal_canvas.getContext("2d");
+	
+	 // Triangle vertices
+    const vertices = [
+      { x: fractal_canvas.width / 2, y: 20 },                // Top
+      { x: 20, y: fractal_canvas.height - 20 },               // Bottom left
+      { x: fractal_canvas.width - 20, y: fractal_canvas.height - 20 } // Bottom right
+    ];
+
+    // Start from a random point
+    let point = {
+      x: Math.random() * fractal_canvas.width,
+      y: Math.random() * fractal_canvas.height
+    };
+	fractal_ctx.fillStyle= "#00ffcc";
+	
+	
+	function drawFractal( interations = 1000){
+		for(let i=0; i<interations; i++){
+			
+			// pick vertex at random
+			
+			const v = vertices[Math.floor(Math.random() * 3)];
+			
+			// move halfway 
+			point.x = (point.x + v.x) /2;
+			point.y = (point.y + v.y) /2;
+			
+			// Draw
+			
+			fractal_ctx.fillRect(point.x, point.y,1,1);
+		}
+		
+		requestAnimationFrame(drawFractal);
+	}
+	
+	drawFractal();
+});
     //---------------- SUPPORT FUNCTIONS ------------------
 
     function Pixel_manip(imageData) {
@@ -178,5 +218,3 @@ jQuery(function ($) {
     function toGray(data, i) {
         return 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2];
     }
-
-});
