@@ -54,14 +54,19 @@ class Auth extends ResourceController
 			$locked_until = null;
 			
 			//Progressive lock calculation 
-			if($attempts>=3){
-				$locked_until = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-			}
+			
+			$lockTime = match(true){
+				$attempts >= 12 => '+7 days ',
+				$attempts  >= 9 => '+24 hours',
+				$attempts >=6 => '+1 hour',
+				$attempts >=3 => '+15 minutes',
+				default => null,
+			};
 			
 			//feature update
 			$this->userModel->update($user['id'],[
 				'failed_attempts' => $attempts,
-				'lock_until' => $locked_until,
+				'lock_until' => $lockTime ?  date('Y-m-d H:i:s', strtotime($lockTime)) : null,
 			]);
             return $this->respond([
 				'error' => 'Invalid credentials.'
