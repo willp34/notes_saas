@@ -29,30 +29,56 @@ class Auth extends ResourceController
         if (!$email || !$password) {
             return $this->failValidationErrors('Email and password are required.');
         }
+		
 
         $user = $this->userModel->where('email', $email)->first();
+		
+		if(!$user ){
+			 return $this->respond([
+				'error' => 'Invalid credentials. No such user'
+			]);
+		}
 
-        if (!$user || !password_verify($password, $user['password'])) {
+		// check if account is locked
+
+		if($user['lock_until']  && strtotime($user['lock_until']) > time() ){
+			 return $this->respond([
+				'error' => 'Account locked until '. $user['lock_until']
+			]);
+		}
+		// wrong password 
+        if ( !password_verify($password, $user['password'])) {
+			
+			$attempts = $user['failed_attempts']+1;
+			
+			$locked_until = null;
+			
+			//Progressive lock calculation 
+			if($attempts>=3){
+				$locked_until = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+			}
+			
+			//feature update
+			$this->userModel->update($user['id'],[
+				'failed_attempts' => $attempts,
+				'lock_until' => $locked_until,
+			]);
             return $this->respond([
 				'error' => 'Invalid credentials.'
 			]);
         }
 		
-		// JWT payload
-        $key = getenv('JWT_SECRET');
-        $iat = time();
-        $exp = $iat + 3600; // Token expires in 1 hour
-
-        $payload = [
-            'iss' => base_url(),
-            'aud' => base_url(),
-            'iat' => $iat,
-            'exp' => $exp,
-            'uid' => $user['id'],
-            'email' => $user['email']
-        ];
-
-        $token = JWT::encode($payload, $key, 'HS256');
+		
+		// Successful log in -> reset counters
+		
+		$this->userModel->update($user['id'],[
+				'failed_attempts' => 0,
+				'lock_until' => null,
+			]);
+		
+		
+		// Generate JWT
+		$token = $this->generateJWT($user);
 		
 		setcookie('CI4J~WT', $token, [
             'expires' => time() + 3600,
@@ -61,6 +87,7 @@ class Auth extends ResourceController
             'secure' => false, // Set true in production
             'samesite' => 'Lax'
         ]);
+		
 		$jwtInformation["token"] =$token;
 		$jwtInformation["user"]= $user; 
 		
@@ -80,6 +107,25 @@ class Auth extends ResourceController
 				]);
 		}
 		
+		
+	private function generateJWT($Authorized_user){
+		// JWT payload
+        $key = getenv('JWT_SECRET');
+        $iat = time();
+        $exp = $iat + 3600; // Token expires in 1 hour
+
+        $payload = [
+            'iss' => base_url(),
+            'aud' => base_url(),
+            'iat' => $iat,
+            'exp' => $exp,
+            'uid' => $Authorized_user['id'],
+            'email' => $Authorized_user['email']
+        ];
+
+        return JWT::encode($payload, $key, 'HS256');
+		
+	}
 	public function logOut(){
 			
 			setcookie('token', '', time() - 3600, '/');
