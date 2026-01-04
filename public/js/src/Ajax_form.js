@@ -51,7 +51,6 @@ async function process_ajax_request(e) {
 			console.error("wwww  Caught error:", err);
 				const msg = err?.message || "Unknown error occurred";
 				handleApiError(err);
-				alert("Im here "+msg); 
 			}
 		
 	}
@@ -95,7 +94,6 @@ jQuery(document).on("click", "a", function (e) {
 				console.error("wwww  Caught error:", err);
 				  const msg = err?.message || "Unknown error occurred";
 
-				alert("Im here "+msg);
 				}
 			)
 		  }

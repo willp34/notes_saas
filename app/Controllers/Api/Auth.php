@@ -6,18 +6,26 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\Shield\Authentication\Authentication;
 
 use App\Models\UserModel;
+use App\Models\DeviceModel;   
+use App\Models\LoginVerifyModel; 
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 use  App\Services\EmailService;
-
+use  Config\Services;
 class Auth extends ResourceController
 {
 	protected $userModel;
+	protected $deviceModel ;
+	protected $loginVerifyModel;
 	
 	public function __construct(){
 		$this->userModel = new UserModel();
-	}
+		$this->deviceModel = new DeviceModel();
+		$this->loginVerifyModel = new loginVerifyModel();
+		
+		}
 	public function login(){
 		
 		
@@ -81,6 +89,44 @@ class Auth extends ResourceController
 				'lock_until' => null,
 			]);
 		
+		// After pasword is verified 
+		
+		$ip = $this->request->getIPAddress();
+		$agent = $this->request->getUserAgent()->getAgentString();
+		
+		$deviceHash = hash('sha256', $ip . $agent) ;
+		
+		// Check if device is already trusted
+		
+		$device = $this->deviceModel
+			->where('user_id',$user["id"])
+			->where('device_hash',$deviceHash)
+			->first();
+			
+		if(!$device || !$device["verified"]){
+			
+			// gernerate verification token
+			
+			$token = bin2hex(random_bytes(32));
+			$expires =  date('Y-m-d H:i:s', strtotime('+10 minutes'));
+			
+			// store verification request
+			$this->loginVerifyModel->insert([
+					'user_id'    => $user['id'],
+					'token'      => $token,
+					'expires_at' => $expires,
+					'ip'         => $ip,
+					'user_agent' => $agent
+				]);
+				
+			// Send confirmation email
+			$this->sendNewDeviceEmail($user['email'], $token, $ip, $agent);
+			// ⛔ STOP login until verified
+			return $this->failUnauthorized(
+				'New device detected. Check your email to confirm this login.'
+			);
+		}
+		
 		
 		// Generate JWT
 		$token = $this->generateJWT($user);
@@ -112,7 +158,34 @@ class Auth extends ResourceController
 				]);
 		}
 		
+	private function sendNewDeviceEmail($email, $token, $ip, $agent){
 		
+		$link = base_url("auth/verify-login/$token");
+		$message = view('emails/new_device', [
+			'link'  => $link,
+			'ip'    => $ip,
+			'agent' => $agent,
+			'name' => 'William Pritchard'
+		]);
+
+	
+
+			
+		//$emailService = \Config\Services::email();
+		$emailService = Services::email();
+		$emailService->setTo($email);
+		$emailService->setSubject('New Login Attempt — Was This You?');
+		$emailService->setMessage($message);
+		$emailService->setMailType('html'); // Set to 'text' if you don’t want HTML
+		$emailService->send();
+		if (!$emailService->send()) {
+			return $this->response->setJSON([
+				'error' => 'Email failed',
+				'debug' => $emailService->printDebugger(['headers'])
+			])->setStatusCode(500);	
+		}
+	}
+	
 	private function generateJWT($Authorized_user){
 		// JWT payload
         $key = getenv('JWT_SECRET');
