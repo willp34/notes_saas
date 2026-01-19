@@ -33,27 +33,17 @@ $routes->group('api', function($routes){
 	// Notes
 	$routes->get('notes', 'Api\Note::index');
 	
-	
-	
-	
-	
 	//invite team member 
 	$routes->get('invite/(:num)', 'Api\Team::invite/$1');
 	$routes->post('invite/(:num)', 'Api\Team::invite/$1');
-	
-	
 	
 	// users in team
 	$routes->get('getUsersforTeam/(:num)', 'Api\Team::getUsersforTeam/$1');
 	$routes->post('getUsersforTeam/(:num)', 'Api\Team::getUsersforTeam/$1');
 	
-	
-	
-	
 	// notes  
 	$routes->post( 'notes' ,'Api\Note::create'   )  ;
-	
-	
+		
 });
 
 
@@ -76,13 +66,35 @@ $routes->group('auth', function($routes){
 	$routes->get('logout', 'Api\Auth::logOut');
 	$routes->post('sendResetLink', 'Api\Auth::sendResetLink');
 	//$routes->get('sendResetLink', 'Auth::sendResetLink');
+	
+	
+	//Trusted device verification link
+	
+	$routes->get('verifyLogin/(:segment)', 'Api\Auth::verifyLogin/$1');
+	
 });
+
+//Security
+#Auththentication
+$routes->group('security', function($routes){
+	$routes->post('enable2fa', 'Api\Security::enable2FA');
+	$routes->post('disable2fa', 'Api\Securiy::disable2FA');
+	
+	$routes->get('enable2fa', 'Api\Security::enable2FA');
+	$routes->get('disable2fa', 'Api\Security::disable2FA');
+	$routes->post('confirm2fa', 'Api\Security::confirm2FA');
+
+});
+
+
 
 #Dashboard
 $routes->group('dashboard', function($routes){
 	
 	$routes->get('/', 'Dashboard::index');
 	$routes->get('images', 'Dashboard::image_thresholding');
+	$routes->get('settings', 'Dashboard::settingsPage');
+	
 	
 });
 

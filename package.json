@@ -1,0 +1,14 @@
+{
+  "name": "frontend-assets",
+  "private": true,
+  "devDependencies": {
+    "sass": "^1.97.2"
+  },
+  
+  "scripts": {
+    "dev": "sass --source-map assets/scss/app.scss public/css/app.css",
+    "watch": "sass --watch --source-map assets/scss:public/css",
+    "build": "sass --no-source-map assets/scss/app.scss public/css/app.min.css --style=compressed"
+  }
+
+}

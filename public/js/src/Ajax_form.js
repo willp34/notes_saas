@@ -56,7 +56,7 @@ async function process_ajax_request(e) {
 	}
 }
 
-jQuery(document).on("click", "a", function (e) {
+jQuery(document).on("click", "a.Add-Note, a.inviteForm", function (e) {
     e.preventDefault();
 	const link  = jQuery(this);
 	 
@@ -97,4 +97,99 @@ jQuery(document).on("click", "a", function (e) {
 				}
 			)
 		  }
+		  
+		 //2FA front end
+		 
+		 const toggle2FA = document.getElementById('toggle2FA') ;
+		 const myModalEl =document.getElementById("myModal") ;
+		toggle2FA.addEventListener('change', modalDisplay)
    
+  async function  modalDisplay(e){
+	   const myModal =new bootstrap.Modal(myModalEl);
+			if(e.target.checked){
+					console.log("2fa toggle works");
+					
+					myModal.show();
+					setup2FA();
+			}
+   }
+   
+   async function setup2FA(){
+	   const api = new ApiService();
+		try{
+			const response = await api.request({
+			url: 'http://localhost/notes-saas/public/index.php/security/enable2fa',
+			method: "POST",
+			data : null
+			});
+			
+			console.log("Response: ", response);
+			// SHOW Qr in a modal 
+			showQRModel(response.qr_url);
+			
+		
+			
+		}catch( err)
+		{	
+			console.error("wwww  Caught error:", err);
+				const msg = err.message || "Unknown error occurred";
+				handleApiError(err);
+			}
+   }
+   //Modal display function
+  function showQRModel(qrUrl) {
+    const container = document.querySelector('.modal-body');
+    container.innerHTML = '';
+
+    const qrSlot = document.createElement('div');
+    qrSlot.id = 'qr-slot';
+
+    const codeSlot = document.createElement('div');
+    codeSlot.id = 'code-slot';
+
+    const statusSlot = document.createElement('div');
+    statusSlot.id = 'status-slot';
+
+    const qrImageUrl =
+        'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' +
+        encodeURIComponent(qrUrl);
+
+    const img = document.createElement('img');
+    img.src = qrImageUrl;
+
+    qrSlot.appendChild(img);
+
+    const input = document.createElement('input');
+    input.id = 'otp';
+    input.placeholder = 'Enter 6-digit code';
+    input.maxLength = 6;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Confirm';
+    btn.onclick = confirm2FA;
+
+    codeSlot.appendChild(input);
+    codeSlot.appendChild(btn);
+
+    container.appendChild(qrSlot);
+    container.appendChild(codeSlot);
+    container.appendChild(statusSlot);
+}
+
+function confirm2FA() {
+    const code = document.getElementById('otp').value;
+
+    fetch('http://localhost/notes-saas/public/index.php/security/confirm2fa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+				 'Authorization': 'Bearer ' +  jQuery.cookie('CI4J~WT') },
+        body: JSON.stringify({ code })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('status-slot').textContent =
+            data.status === 'ok'
+                ? '2FA enabled successfully ✔'
+                : 'Invalid code';
+    });
+}

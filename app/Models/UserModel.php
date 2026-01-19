@@ -9,7 +9,8 @@ class UserModel extends Model
 	protected $table = "users";
 	protected $primaryKey= 'id';
 	protected $returnType = 'array';
-	protected $allowedFields = ['email','password', 'reset_token', 'reset_expires_at', 'failed_attempts', 'lock_until'];
+	protected $allowedFields = ['email','password', 'reset_token', 'reset_expires_at', 'failed_attempts',
+	'lock_until', 'two_factor_enabled', 'two_factor_secret'];
 	protected $useTimestamps = true;
 	
 	

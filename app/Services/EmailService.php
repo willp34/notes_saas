@@ -24,7 +24,7 @@ class EmailService{
 
 				$resetLink = base_url("auth/resetPassword/$e_token");
 			
-				$message = $template;
+				$message = $ ;
 				$email->setMessage($message);
 				$email->setMailType('html'); // Set to 'text' if you don’t want HTML
 

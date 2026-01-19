@@ -3,7 +3,7 @@
 </div>
 <div id="toastArea" class="toast-container position-fixed top-0 end-0 p-3 "
 	style="z-index: 99999"></div>
-<div class="mt-5 p-4 bg-dark text-white text-center">
+<div class="mt-5 p-4  text-white text-center   footer">
   <p>Footer</p>
 </div>
 

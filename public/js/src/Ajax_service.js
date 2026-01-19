@@ -3,6 +3,7 @@ export default class ApiService{
 	
 	constructor(token = null){
 		this.token = token || jQuery.cookie('CI4J~WT') || null;
+
 	}
 	
 	buildHeaders(extra = {}){

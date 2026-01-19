@@ -1,0 +1,36 @@
+
+.encoded-output {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+
+#notes{ background:yellow; position:fixed; width:300px; height:400px; bottom:0px; right:0px; z-index:200}
+
+/* Wrapper that contains image + canvas + slider */
+#compare-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;   /* keeps wrapper sized to image */
+}
+
+/* Canvas overlay (filtered image) */
+#canvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/* Slider handle */
+#slider-handle {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: #000;         /* or your color */
+    cursor: ew-resize;
+    z-index: 10;
+}

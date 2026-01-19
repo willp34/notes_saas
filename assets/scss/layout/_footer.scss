@@ -1,0 +1,8 @@
+@use "../variables" as v;
+
+.footer {
+  background-color: v.$secondary; // ← change this
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+}
