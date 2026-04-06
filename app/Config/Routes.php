@@ -43,6 +43,8 @@ $routes->group('api', function($routes){
 	
 	// notes  
 	$routes->post( 'notes' ,'Api\Note::create'   )  ;
+	
+	
 		
 });
 
@@ -105,3 +107,5 @@ $routes->post('/api/addUser', 'Api\User::create');
 
 $routes->get('/api/users/(:num)/(:segment)', 'Api\User::getUsers/$1/$2');
  
+//services 
+	$routes->get( 'services' ,'Services::index'   )  ;

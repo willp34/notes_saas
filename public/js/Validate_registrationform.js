@@ -38,6 +38,8 @@ form.addEventListener('submit', function (event) {
     const confirmPassword = document.getElementById('confirmPassword');
 
     let isValid = true;
+	
+	
 
     // Strong email regex (not perfect, but good)
     const strongEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/;
